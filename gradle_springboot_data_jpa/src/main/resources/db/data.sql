@@ -1,2 +1,1 @@
-insert into user_info
-values (1, "Kevin",222);
+insert into user_info (id, name, age) values (1,'Ramesh',222);

@@ -20,6 +20,7 @@ package com.jkevin.gradle_springboot_data_jpa.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -30,6 +31,7 @@ import java.io.Serializable;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Table(name="user_info")
 public class UserEntity implements Serializable {
 
