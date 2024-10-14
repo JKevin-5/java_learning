@@ -14,8 +14,8 @@ java {
 }
 
 repositories {
-    mavenLocal()
-    maven {
+	mavenLocal()
+	maven {
         url 'https://maven.aliyun.com/repository/public'
     }
 	mavenCentral()
@@ -23,18 +23,19 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-    compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-    
-	testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 	
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 tasks.named('test') {
