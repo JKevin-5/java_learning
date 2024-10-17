@@ -1,4 +1,4 @@
-package com.jkevin.gradle_project_data_guava.config;
+package com.jkevin.gradle_project_data_caffeine.config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @EnableCaching
 @Configuration
-public class GuavaCacheConfig {
+public class CaffeineCacheConfig {
 
 
 }
