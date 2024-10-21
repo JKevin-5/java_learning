@@ -1,48 +1,51 @@
 package com.jkevin.gradle_springboot_data_mybatis_plus;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.jkevin.gradle_springboot_data_mybatis_plus.entity.UserEntity;
-import com.jkevin.gradle_springboot_data_mybatis_plus.service.UserService;
+import com.jkevin.gradle_springboot_data_mybatis_plus.service.TestService;
+import com.jkevin.gradle_springboot_data_mybatis_plus.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-@Rollback
 @SpringBootTest
 class GradleProjectApplicationTests {
 
 	@Autowired
-	private UserService userService;
+	private UserServiceImpl userServiceImpl;
 
-	@BeforeEach
-	void addTest() {
-		assertTrue(userService.save(new UserEntity("1","Kevin")));
-	}
+	@Autowired
+	private TestService testService;
+
+//	@BeforeEach
+//	void addTest() {
+//		assertTrue(userService.save(new UserEntity("1","Kevin")));
+//	}
 
 	@Test
 	void updateTest() {
-		assertEquals("Joker",userService.updateMethod().getUserName());
+		assertEquals("Joker",userServiceImpl.updateMethod().getUserName());
 	}
 
 	@Test
-	@Transactional
-	void multiTransTest() {
-
-	}
-
 	public void add() {
-		userService.save(new UserEntity("2","Kevin"));
+		userServiceImpl.save(new UserEntity("2","Kevin"));
 	}
+
+	// requiresNew 另起一个事务，原来的事务报错不会影响该新事务
+	@Test
+	public void t1() {
+		testService.test1();
+	}
+
+	// nested 加入到外层事务中，在外部事务中创建子事务
+	@Test
+	public void t2() {
+		testService.test2();
+	}
+
+
 }
