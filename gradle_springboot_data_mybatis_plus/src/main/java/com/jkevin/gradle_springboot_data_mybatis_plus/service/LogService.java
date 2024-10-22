@@ -64,4 +64,28 @@ public class LogService {
     public void insertLogNever(){
         logDao.insert(new LogEntity("insert","Propagation.NEVER"));
     }
+
+    // 无事务方法，调用有事务方法
+    public void insertLogNoTransaction(){
+        this.insertLogRequired();
+        int i = 1/0;
+    }
+
+    public void noTrans(){
+        logDao.insert(new LogEntity("insert","Propagation.NONE"));
+    }
+
+    // 无事务方法，调用有事务方法
+    @Transactional
+    public void insertLogTransaction(){
+        this.noTrans();
+        int i = 1/0;
+    }
+
+    // required事务，会加入到当前事务中，并不会另起一个事务
+    @Transactional
+    public void insertTest1(){
+        this.insertLogRequired();
+        int i= 1/0;
+    }
 }

@@ -67,4 +67,16 @@ public class TestService {
     public void test7(){
         logService.insertLogNever();
     }
+
+    public void test8(){
+        logService.insertLogNoTransaction();
+    }
+
+    public void test9(){
+        logService.insertLogTransaction();
+    }
+    
+    public void test10(){
+        logService.insertTest1();
+    }
 }

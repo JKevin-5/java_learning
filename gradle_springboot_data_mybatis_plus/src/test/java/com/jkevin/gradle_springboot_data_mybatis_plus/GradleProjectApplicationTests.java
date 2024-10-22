@@ -98,4 +98,34 @@ class GradleProjectApplicationTests {
 	public void t7(){
 		assertThrows(Exception.class, () -> testService.test7());
 	}
+
+	// 场景1：无事务调用有事务的方法
+	// 外层报错无法回滚，事务失效
+	@Test
+	public void t8(){
+		Long count1 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"Propagation.REQUIRED"));
+		assertThrows(Exception.class, () -> testService.test8());
+		Long count2 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"Propagation.REQUIRED"));
+        assertEquals(1, count2 - count1);
+	}
+
+	// 场景2：有事务调用无事务方法
+	// 无事务方法会被加进外层事务中，会进行回滚
+	@Test
+	public void t9(){
+		Long count1 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"NONE"));
+		assertThrows(Exception.class, () -> testService.test9());
+		Long count2 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"NONE"));
+		assertEquals(0, count2 - count1);
+	}
+
+	// 场景3：有事务的方法调用有事务的方法
+	// 外层事务失败，内层也会进行回滚
+	@Test
+	public void t10(){
+		Long count1 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"Propagation.REQUIRED"));
+		assertThrows(Exception.class, () -> testService.test10());
+		Long count2 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"Propagation.REQUIRED"));
+		assertEquals(0, count2 - count1);
+	}
 }
