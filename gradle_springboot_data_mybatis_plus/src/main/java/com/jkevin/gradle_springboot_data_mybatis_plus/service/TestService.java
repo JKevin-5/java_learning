@@ -37,4 +37,34 @@ public class TestService {
             logService.insertLogNested();
         }catch (Exception ignored){}
     }
+
+    // 外层有事务，则加入事务
+    @Transactional
+    public void test3(){
+        logService.insertLogSupports();
+        int i = 1/0;
+    }
+
+    // 外层没有事务，则不创建事务
+    public void test4(){
+        logService.insertLogSupports();
+        int i = 1/0;
+    }
+
+    // 外层必须有事务，否则报错
+    public void test5(){
+        logService.insertLogMandatory();
+    }
+
+    // 不支持事务
+    @Transactional
+    public void test6(){
+        logService.insertLogNotSupported();
+    }
+
+    // 不支持事务，在事务中将进行报错
+    @Transactional
+    public void test7(){
+        logService.insertLogNever();
+    }
 }

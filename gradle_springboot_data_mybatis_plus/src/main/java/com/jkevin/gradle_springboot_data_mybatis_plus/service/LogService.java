@@ -20,7 +20,9 @@ public class LogService {
     @Autowired
     LogDao logDao;
 
-    // 默认事务传播级别
+    // 默认事务传播级别，如果已经在一个事务中，就加入当前事务，否则重新开启一个新的事务
+    // 内外方法异常都会进行回滚，因为内外方法在同一个事务中
+    // 即使外层进行try catch也会回滚
     @Transactional(propagation= Propagation.REQUIRED)
     public void insertLogRequired(){
         logDao.insert(new LogEntity("insert","Propagation.REQUIRED"));
@@ -32,20 +34,20 @@ public class LogService {
         logDao.insert(new LogEntity("insert","Propagation.REQUIRES_NEW"));
     }
 
-    // 新建事务
+    // 加入成为子事务
     @Transactional(propagation= Propagation.NESTED)
     public void insertLogNested(){
         logDao.insert(new LogEntity("insert","Propagation.NESTED"));
         int i = 1/0;
     }
 
-    // 新建事务
+    // 支持事务，当前如果有事务，加入当前事务；如果没有事务，就以非事务的方式进行
     @Transactional(propagation= Propagation.SUPPORTS)
     public void insertLogSupports(){
         logDao.insert(new LogEntity("insert","Propagation.SUPPORTS"));
     }
 
-    // 新建事务
+    // 支持事务，外部必须有事务，不然会抛出异常
     @Transactional(propagation= Propagation.MANDATORY)
     public void insertLogMandatory(){
         logDao.insert(new LogEntity("insert","Propagation.MANDATORY"));
