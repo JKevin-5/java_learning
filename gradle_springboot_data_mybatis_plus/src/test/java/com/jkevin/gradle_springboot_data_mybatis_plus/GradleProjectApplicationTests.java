@@ -128,4 +128,22 @@ class GradleProjectApplicationTests {
 		Long count2 = logDao.selectCount(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getContent,"Propagation.REQUIRED"));
 		assertEquals(0, count2 - count1);
 	}
+
+	// 测试，在同一个事务中可以做到读未提交
+	@Test
+	@Rollback
+	@Transactional
+	public void t11(){
+		logDao.insert(new LogEntity("1","1"));
+		LogEntity log = logDao.selectOne(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getType,"1"));
+        assertEquals("1", log.getType());
+		log.setType("2");
+		logDao.updateById(log);
+		LogEntity log2 = logDao.selectOne(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getType,"2"));
+		assertEquals("2", log2.getType());
+		logDao.delete(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getType,"2"));
+		LogEntity log3 = logDao.selectOne(new LambdaQueryWrapper<LogEntity>().eq(LogEntity::getType,"2"));
+		assertNull(log3);
+	}
+
 }
